@@ -10,10 +10,10 @@
 // 같은 패턴(api/_lib/{platform}.ts + 이런 얇은 핸들러)으로 추가하면 됩니다.
 // ────────────────────────────────────────────────────────────────
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { getSupabaseAdmin } from './_lib/supabaseAdmin';
-import { isAuthorized } from './_lib/auth';
-import { startSyncLog, finishSyncLog } from './_lib/syncLog';
-import { runYoutubeSync } from './_lib/youtube';
+import { getSupabaseAdmin } from './_lib/supabaseAdmin.ts';
+import { isAuthorized } from './_lib/auth.ts';
+import { startSyncLog, finishSyncLog } from './_lib/syncLog.ts';
+import { runYoutubeSync } from './_lib/youtube.ts';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!isAuthorized(req)) {

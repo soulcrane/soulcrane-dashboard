@@ -10,7 +10,7 @@
 //   4) 개별 영상/배치 단위 오류는 건너뛰고 계속 진행 (전체 중단 없음)
 // ────────────────────────────────────────────────────────────────
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { SyncResult } from './types';
+import type { SyncResult } from './types.ts';
 
 const YT_API = 'https://www.googleapis.com/youtube/v3';
 
