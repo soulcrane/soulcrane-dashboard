@@ -1,0 +1,15 @@
+/* Tailwind 기본 레이어 불러오기 */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 전역 기본값: 다크 배경 + 한글 친화 폰트 스택 */
+html, body, #root { height: 100%; }
+body {
+  margin: 0;
+  background: #F5F7FA;
+  color: #101828;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo',
+               'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
