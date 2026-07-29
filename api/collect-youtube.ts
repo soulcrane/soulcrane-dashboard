@@ -11,9 +11,9 @@
 // ────────────────────────────────────────────────────────────────
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { getSupabaseAdmin } from './_lib/supabaseAdmin';
-import { isAuthorized } from './_lib/auth.ts';
-import { startSyncLog, finishSyncLog } from './_lib/syncLog.ts';
-import { runYoutubeSync } from './_lib/youtube.ts';
+import { isAuthorized } from './_lib/auth';
+import { startSyncLog, finishSyncLog } from './_lib/syncLog';
+import { runYoutubeSync } from './_lib/youtube';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (!isAuthorized(req)) {
