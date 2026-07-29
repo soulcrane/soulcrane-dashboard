@@ -29,11 +29,14 @@ export interface Video {
   contentGroup: string;    // 크로스플랫폼 묶음 키 예: '60s MV' (같은 영상의 플랫폼별 성과 합산용)
   uploadDate: string;      // 'YYYY-MM-DD'
   url: string;             // 원본 링크
+<<<<<<< HEAD
   externalVideoId?: string | null; // 플랫폼상의 원본 영상 ID (유튜브: 11자). 자동 수집/등록 매칭용.
                                     // 자연키 = (platform, externalVideoId). 유튜브 외 플랫폼도 공유.
   sourceTitle?: string | null;     // 플랫폼에서 가져온 원본 제목. 자동화가 매번 갱신.
                                     // title(화면 표시용)과 분리되어 있어, 관리자가 title을 바꿔도
                                     // 자동화가 되돌리지 않음.
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
 }
 
 // ② 주간 수치 — 영상 × 조사일 당 1행 (Supabase: weekly_metrics)

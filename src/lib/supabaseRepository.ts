@@ -23,8 +23,11 @@ const toVideo = (r: any): Video => ({
   contentGroup: r.content_group,
   uploadDate: r.upload_date,
   url: r.url ?? '',
+<<<<<<< HEAD
   externalVideoId: r.external_video_id ?? null,
   sourceTitle: r.source_title ?? null,
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
 });
 const fromVideo = (v: Video) => ({
   id: v.id,
@@ -35,8 +38,11 @@ const fromVideo = (v: Video) => ({
   content_group: v.contentGroup,
   upload_date: v.uploadDate,
   url: v.url,
+<<<<<<< HEAD
   external_video_id: v.externalVideoId ?? null,
   source_title: v.sourceTitle ?? null,
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
 });
 
 const toMetric = (r: any): WeeklyMetric => ({

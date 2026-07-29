@@ -15,7 +15,10 @@ import { VideoDetail } from './pages/VideoDetail';
 import { WeeklyCompare } from './pages/WeeklyCompare';
 import { AiAnalysis } from './pages/AiAnalysis';
 import { WeeklyInput } from './pages/WeeklyInput';
+<<<<<<< HEAD
 import { AutomationSettings } from './pages/AutomationSettings';
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
 
 import { buildMainContents, surveyDatesDesc } from './lib/metrics';
 import { colors } from './theme/theme';
@@ -95,9 +98,12 @@ function Router() {
       case 'input':
         return <WeeklyInput />;
 
+<<<<<<< HEAD
       case 'automation':
         return <AutomationSettings />;
 
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
       default:
         return <Dashboard onOpenMainContent={() => setActive('main-content')} />;
     }

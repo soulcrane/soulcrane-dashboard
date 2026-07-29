@@ -17,7 +17,10 @@ const MENU = [
 // 관리자 메뉴. 영상 등록·팔로워 입력은 '주간 데이터 입력' 화면에 통합되어 있습니다.
 const ADMIN_MENU = [
   { key: 'input', label: '주간 데이터 입력', icon: '✎' },
+<<<<<<< HEAD
   { key: 'automation', label: '자동화 설정', icon: '⚙' },
+=======
+>>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
 ];
 
 interface Props {
