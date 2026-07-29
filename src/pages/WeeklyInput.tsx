@@ -30,11 +30,9 @@ export function WeeklyInput() {
   const {
     videos, metrics, followers,
     upsertMetric, deleteMetric, deleteSurveyDate,
-<<<<<<< HEAD
+ 
     addVideo, updateVideo, deleteVideo, upsertFollower, resetToSeed,
-=======
-    addVideo, deleteVideo, upsertFollower, resetToSeed,
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
+ 
   } = useData();
 
   const dates = surveyDatesDesc(metrics);
@@ -46,16 +44,13 @@ export function WeeklyInput() {
   // 신규 콘텐츠 등록 폼 상태
   const [showNewForm, setShowNewForm] = useState(false);
   const [nv, setNv] = useState({
-    platform: 'youtube' as Platform,
-    contentType: 'short' as ContentType,
-    title: '',
-    uploadDate: '',
-    url: '',
-<<<<<<< HEAD
-    externalVideoId: '',
-=======
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
-  });
+  platform: 'youtube' as Platform,
+  contentType: 'short' as ContentType,
+  title: '',
+  uploadDate: '',
+  url: '',
+  externalVideoId: '',
+});
 
   // 현재 주차의 수치를 videoId → metric 으로 빠르게 찾기
   const currentMetrics = useMemo(() => {
@@ -119,22 +114,25 @@ export function WeeklyInput() {
       contentGroup: nv.title.replace(/^(SF\.|LF\.)\s*/, '').trim(),
       uploadDate: nv.uploadDate,
       url: nv.url.trim(),
-<<<<<<< HEAD
+ 
       externalVideoId: nv.platform === 'youtube' ? nv.externalVideoId.trim() || null : null,
     };
-    await addVideo(video);
-    setNv({ platform: 'youtube', contentType: 'short', title: '', uploadDate: '', url: '', externalVideoId: '' });
-=======
-    };
-    await addVideo(video);
-    setNv({ platform: 'youtube', contentType: 'short', title: '', uploadDate: '', url: '' });
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
-    setShowNewForm(false);
-    notify(`'${video.title}' 콘텐츠를 등록했습니다.`);
-  };
+await addVideo(video);
 
-  // ── 새 조사 주차 만들기 ──
-  const handleCreateWeek = () => {
+setNv({
+  platform: 'youtube',
+  contentType: 'short',
+  title: '',
+  uploadDate: '',
+  url: '',
+  externalVideoId: '',
+});
+
+notify('콘텐츠를 등록했습니다.');
+};
+
+// ── 새 조사 주차 만들기 ──
+const handleCreateWeek = () => {
     if (!newDate) return notify('새 조사일을 선택해 주세요.');
     setSurveyDate(newDate);
     setNewDate('');
@@ -223,14 +221,14 @@ export function WeeklyInput() {
               onChange={(v) => setNv({ ...nv, uploadDate: v })} />
             <TextField label="원본 링크" value={nv.url}
               onChange={(v) => setNv({ ...nv, url: v })} placeholder="https://..." />
-<<<<<<< HEAD
+ 
             {nv.platform === 'youtube' && (
               <TextField label="유튜브 영상 ID (자동 수집용)" value={nv.externalVideoId}
                 onChange={(v) => setNv({ ...nv, externalVideoId: v })}
                 placeholder="예: dQw4w9WgXcQ (링크의 v= 뒤 11자리)" />
             )}
-=======
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
+
+ 
             <Button variant="primary" onClick={handleAddVideo}>콘텐츠 등록</Button>
           </div>
         )}
@@ -259,17 +257,12 @@ export function WeeklyInput() {
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                 <thead>
                   <tr>
-<<<<<<< HEAD
+ 
                     {['영상명', '플랫폼', '유형', '유튜브ID', '조회수', '좋아요', '댓글', '저장', '공유', ''].map((h, i) => (
                       <th key={h + i} style={{
                         fontSize: 12, fontWeight: 500, color: colors.textMuted,
                         padding: '8px 10px', textAlign: i >= 4 && i <= 8 ? 'right' : 'left',
-=======
-                    {['영상명', '플랫폼', '유형', '조회수', '좋아요', '댓글', '저장', '공유', ''].map((h, i) => (
-                      <th key={h + i} style={{
-                        fontSize: 12, fontWeight: 500, color: colors.textMuted,
-                        padding: '8px 10px', textAlign: i >= 3 && i <= 7 ? 'right' : 'left',
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
+
                         borderBottom: `1px solid ${colors.border}`, whiteSpace: 'nowrap',
                       }}>{h}</th>
                     ))}
@@ -314,7 +307,7 @@ export function WeeklyInput() {
                                      color: colors.textMuted, whiteSpace: 'nowrap' }}>
                           {contentTypeLabels[v.contentType]}
                         </td>
-<<<<<<< HEAD
+ 
                         <td style={{ padding: '6px 10px', borderBottom: `1px solid ${colors.border}`, width: 140 }}>
                           {v.platform === 'youtube' ? (
                             <input
@@ -334,8 +327,8 @@ export function WeeklyInput() {
                             <span style={{ display: 'block', color: colors.textFaint }}>—</span>
                           )}
                         </td>
-=======
->>>>>>> 1bfe43f68f26dcab023cabaa46bb79d24cdcbca2
+
+ 
                         {cell('views', true)}
                         {cell('likes', true)}
                         {cell('comments', true)}
