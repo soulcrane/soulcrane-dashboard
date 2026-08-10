@@ -20,9 +20,9 @@ export default async function handler(_req: VercelRequest, res: VercelResponse) 
     platforms: {
       youtube: { apiKeySet: Boolean(process.env.YOUTUBE_API_KEY) },
       // 향후 플랫폼 추가 시 여기에 한 줄씩 추가:
-      // instagram: { apiKeySet: Boolean(process.env.INSTAGRAM_ACCESS_TOKEN) },
-      // facebook:  { apiKeySet: Boolean(process.env.FACEBOOK_ACCESS_TOKEN) },
-      // tiktok:    { apiKeySet: Boolean(process.env.TIKTOK_ACCESS_TOKEN) },
+            instagram: { apiKeySet: Boolean(process.env.INSTAGRAM_ACCESS_TOKEN) },
+            facebook:  { apiKeySet: Boolean(process.env.FACEBOOK_ACCESS_TOKEN) },
+            // tiktok:    { apiKeySet: Boolean(process.env.TIKTOK_ACCESS_TOKEN) },
     },
   });
 }
