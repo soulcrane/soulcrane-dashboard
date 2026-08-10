@@ -50,8 +50,8 @@ interface StatusResponse {
 // 새 플랫폼 자동화를 추가할 때는 이 배열에 한 줄만 추가하면 화면이 자동으로 확장됩니다.
 const AUTOMATION_PLATFORMS: { platform: string; label: string; endpoint: string | null }[] = [
   { platform: 'youtube', label: '유튜브', endpoint: '/api/collect-youtube' },
-  { platform: 'instagram', label: '인스타그램', endpoint: null },
-  { platform: 'facebook', label: '페이스북', endpoint: null },
+  { platform: 'instagram', label: '인스타그램', endpoint: '/api/collect-instagram' },
+  { platform: 'facebook', label: '페이스북', endpoint: '/api/collect-facebook' },
   { platform: 'tiktok', label: '틱톡', endpoint: null },
 ];
 
