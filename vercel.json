@@ -1,9 +1,17 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
-  "crons": [
-    {
-      "path": "/api/collect-youtube",
-      "schedule": "0 0 * * 1"
-    }
-  ]
+    "$schema": "https://openapi.vercel.sh/vercel.json",
+    "crons": [
+          {
+                  "path": "/api/collect-youtube",
+                  "schedule": "0 0 * * 1"
+          },
+          {
+                  "path": "/api/collect-instagram",
+                  "schedule": "0 0 * * 1"
+          },
+          {
+                  "path": "/api/collect-facebook",
+                  "schedule": "0 0 * * 1"
+          }
+    ]
 }
