@@ -346,6 +346,7 @@ const handleCreateWeek = () => {
  
                         <td style={{ padding: '6px 10px', borderBottom: `1px solid ${colors.border}`, width: 140 }}>
                           {SUPPORTS_LINK_ID.includes(v.platform) ? (
+                            <>
                             <input
                               type="text"
                               defaultValue={v.externalVideoId ?? ''}
@@ -379,6 +380,7 @@ const handleCreateWeek = () => {
                                 조회
                               </button>
                             )}
+                          </>
                           ) : (
                             <span style={{ display: 'block', color: colors.textFaint }}>—</span>
                           )}
