@@ -25,6 +25,7 @@ import type { Platform, ContentType, Video, WeeklyMetric } from '../types';
 //   유튜브: 조회/좋아요/댓글        인스타·페북: +공유        틱톡: +저장
 const SUPPORTS_SAVES: Platform[] = ['tiktok', 'douyin'];
 const SUPPORTS_SHARES: Platform[] = ['instagram', 'facebook', 'douyin'];
+const SUPPORTS_LINK_ID: Platform[] = ['youtube', 'instagram', 'facebook'];
 
 export function WeeklyInput() {
   const {
@@ -115,7 +116,7 @@ export function WeeklyInput() {
       uploadDate: nv.uploadDate,
       url: nv.url.trim(),
  
-      externalVideoId: nv.platform === 'youtube' ? nv.externalVideoId.trim() || null : null,
+      externalVideoId: SUPPORTS_LINK_ID.includes(nv.platform) ? nv.externalVideoId.trim() || null : null,
     };
 await addVideo(video);
 
@@ -222,10 +223,13 @@ const handleCreateWeek = () => {
             <TextField label="원본 링크" value={nv.url}
               onChange={(v) => setNv({ ...nv, url: v })} placeholder="https://..." />
  
-            {nv.platform === 'youtube' && (
-              <TextField label="유튜브 영상 ID (자동 수집용)" value={nv.externalVideoId}
+            {SUPPORTS_LINK_ID.includes(nv.platform) && (
+              <TextField
+                label={nv.platform === 'youtube' ? '유튜브 영상 ID (자동 수집용)' : nv.platform === 'instagram' ? '인스타그램 게시물 ID (자동 수집용)' : '페이스북 게시물 ID (자동 수집용)'}
+                value={nv.externalVideoId}
                 onChange={(v) => setNv({ ...nv, externalVideoId: v })}
-                placeholder="예: dQw4w9WgXcQ (링크의 v= 뒤 11자리)" />
+                placeholder={nv.platform === 'youtube' ? '예: dQw4w9WgXcQ (링크의 v= 뒤 11자리)' : '예: 게시물 URL의 고유 ID'}
+              />
             )}
 
  
@@ -258,7 +262,7 @@ const handleCreateWeek = () => {
                 <thead>
                   <tr>
  
-                    {['영상명', '플랫폼', '유형', '유튜브ID', '조회수', '좋아요', '댓글', '저장', '공유', ''].map((h, i) => (
+                    {['영상명', '플랫폼', '유형', '링크 ID', '조회수', '좋아요', '댓글', '저장', '공유', ''].map((h, i) => (
                       <th key={h + i} style={{
                         fontSize: 12, fontWeight: 500, color: colors.textMuted,
                         padding: '8px 10px', textAlign: i >= 4 && i <= 8 ? 'right' : 'left',
@@ -309,16 +313,16 @@ const handleCreateWeek = () => {
                         </td>
  
                         <td style={{ padding: '6px 10px', borderBottom: `1px solid ${colors.border}`, width: 140 }}>
-                          {v.platform === 'youtube' ? (
+                          {SUPPORTS_LINK_ID.includes(v.platform) ? (
                             <input
                               type="text"
                               defaultValue={v.externalVideoId ?? ''}
-                              placeholder="영상 ID 입력"
+                              placeholder="링크 ID 입력"
                               onBlur={(e) => {
                                 const value = e.target.value.trim();
                                 if (value !== (v.externalVideoId ?? '')) {
                                   updateVideo(v.id, { externalVideoId: value || null });
-                                  notify(`'${v.title}'의 유튜브 ID를 저장했습니다.`);
+                                  notify(`'${v.title}'의 링크 ID를 저장했습니다.`);
                                 }
                               }}
                               style={{ ...inputStyle, textAlign: 'left' as const }}
