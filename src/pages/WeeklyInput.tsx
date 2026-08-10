@@ -91,7 +91,30 @@ export function WeeklyInput() {
     await upsertMetric({ ...base, [field]: value });
   };
 
-  // ── 신규 콘텐츠 등록 ──
+    // ── 콘텐츠 URL로 실제 Graph API media ID 자동 조회 ──
+  const resolveMediaId = async (platform: Platform, url: string): Promise<string | null> => {
+    if (!url.trim()) { notify('먼저 게시물 URL을 입력해 주세요.'); return null; }
+    const endpoint = platform === 'instagram' ? '/api/resolve-instagram-media' : platform === 'facebook' ? '/api/resolve-facebook-media' : null;
+    if (!endpoint) return null;
+    try {
+      const token = (import.meta.env as Record<string, string | undefined>).VITE_ADMIN_TRIGGER_TOKEN;
+      const resp = await fetch(endpoint + '?url=' + encodeURIComponent(url.trim()), {
+        headers: token ? { Authorization: 'Bearer ' + token } : {},
+      });
+      const json = await resp.json();
+      if (!resp.ok || !json.success) {
+        notify('조회 실패: ' + (json.error || '알 수 없는 오류'));
+        return null;
+      }
+      notify('실제 게시물 ID를 찾았습니다: ' + json.mediaId);
+      return json.mediaId as string;
+    } catch (e) {
+      notify('조회 중 오류가 발생했습니다: ' + (e as Error).message);
+      return null;
+    }
+  };
+
+// ── 신규 콘텐츠 등록 ──
   const handleAddVideo = async () => {
     if (!nv.title.trim()) return notify('영상명을 입력해 주세요.');
     if (!nv.uploadDate) return notify('업로드일을 선택해 주세요.');
@@ -231,6 +254,15 @@ const handleCreateWeek = () => {
                 placeholder={nv.platform === 'youtube' ? '예: dQw4w9WgXcQ (링크의 v= 뒤 11자리)' : '예: 게시물 URL의 고유 ID'}
               />
             )}
+            {(nv.platform === 'instagram' || nv.platform === 'facebook') && (
+              <Button variant="ghost" onClick={async () => {
+                const id = await resolveMediaId(nv.platform, nv.url);
+                if (id) setNv({ ...nv, externalVideoId: id });
+              }}>
+                위 '원본 링크'로 실제 ID 조회
+              </Button>
+            )}
+
 
  
             <Button variant="primary" onClick={handleAddVideo}>콘텐츠 등록</Button>
@@ -327,6 +359,26 @@ const handleCreateWeek = () => {
                               }}
                               style={{ ...inputStyle, textAlign: 'left' as const }}
                             />
+                            {(v.platform === 'instagram' || v.platform === 'facebook') && (
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  let sourceUrl = v.url;
+                                  if (!sourceUrl) {
+                                    sourceUrl = window.prompt('게시물 URL을 입력해 주세요.') || '';
+                                    if (!sourceUrl) return;
+                                  }
+                                  const id = await resolveMediaId(v.platform, sourceUrl);
+                                  if (id) {
+                                    updateVideo(v.id, { externalVideoId: id, url: sourceUrl });
+                                    notify('\'' + v.title + '\'의 링크 ID를 저장했습니다. (' + id + ')');
+                                  }
+                                }}
+                                style={{ marginLeft: 4, fontSize: 11 }}
+                              >
+                                조회
+                              </button>
+                            )}
                           ) : (
                             <span style={{ display: 'block', color: colors.textFaint }}>—</span>
                           )}
