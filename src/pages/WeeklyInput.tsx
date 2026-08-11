@@ -91,11 +91,34 @@ export function WeeklyInput() {
     await upsertMetric({ ...base, [field]: value });
   };
 
-    // ── 콘텐츠 URL로 실제 Graph API media ID 자동 조회 ──
-  const resolveMediaId = async (platform: Platform, url: string): Promise<string | null> => {
-    if (!url.trim()) { notify('먼저 게시물 URL을 입력해 주세요.'); return null; }
-    const endpoint = platform === 'instagram' ? '/api/resolve-instagram-media' : platform === 'facebook' ? '/api/resolve-facebook-media' : null;
-    if (!endpoint) return null;
+    // ── 유튜브 URL에서 영상 ID 직접 추출 (URL 자체에 ID가 노출되어 있어 API 호출 불필요) ──
+    const extractYoutubeId = (url: string): string | null => {
+          const patterns = [
+                  /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+                  /[?&]v=([a-zA-Z0-9_-]{11})/,
+                  /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+                  /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+                ];
+          for (const p of patterns) {
+                  const m = url.match(p);
+                  if (m) return m[1];
+          }
+          return null;
+    };
+
+    // ── 콘텐츠 URL로 실제 게시물/영상 ID 자동 조회 ──
+    // 유튜브: URL 자체에 ID가 있으므로 클라이언트에서 즉시 추출 (서버 호출 없음)
+    // 인스타그램/페이스북: URL에 실제 Graph API media ID가 없으므로 서버 API 조회 필요
+    const resolveMediaId = async (platform: Platform, url: string): Promise<string | null> => {
+          if (!url.trim()) { notify('먼저 게시물 URL을 입력해 주세요.'); return null; }
+          if (platform === 'youtube') {
+                  const id = extractYoutubeId(url.trim());
+                  if (!id) { notify('URL에서 영상 ID를 인식하지 못했습니다. 링크 형식을 확인해 주세요.'); return null; }
+                  notify('유튜브 영상 ID를 인식했습니다: ' + id);
+                  return id;
+          }
+          const endpoint = platform === 'instagram' ? '/api/resolve-instagram-media' : platform === 'facebook' ? '/api/resolve-facebook-media' : null;
+          if (!endpoint) return null;
     try {
       const token = (import.meta.env as Record<string, string | undefined>).VITE_ADMIN_TRIGGER_TOKEN;
       const resp = await fetch(endpoint + '?url=' + encodeURIComponent(url.trim()), {
@@ -246,22 +269,25 @@ const handleCreateWeek = () => {
             <TextField label="원본 링크" value={nv.url}
               onChange={(v) => setNv({ ...nv, url: v })} placeholder="https://..." />
  
-            {SUPPORTS_LINK_ID.includes(nv.platform) && (
-              <TextField
-                label={nv.platform === 'youtube' ? '유튜브 영상 ID (자동 수집용)' : nv.platform === 'instagram' ? '인스타그램 게시물 ID (자동 수집용)' : '페이스북 게시물 ID (자동 수집용)'}
-                value={nv.externalVideoId}
-                onChange={(v) => setNv({ ...nv, externalVideoId: v })}
-                placeholder={nv.platform === 'youtube' ? '예: dQw4w9WgXcQ (링크의 v= 뒤 11자리)' : '예: 게시물 URL의 고유 ID'}
-              />
-            )}
-            {(nv.platform === 'instagram' || nv.platform === 'facebook') && (
-              <Button variant="ghost" onClick={async () => {
-                const id = await resolveMediaId(nv.platform, nv.url);
-                if (id) setNv({ ...nv, externalVideoId: id });
-              }}>
-                위 '원본 링크'로 실제 ID 조회
-              </Button>
-            )}
+            {SUPPORTS_LINK_ID.includes(nv.platform) && nv.platform !== 'youtube' && (
+                               <TextField
+                                                 label={nv.platform === 'instagram' ? '인스타그램 게시물 ID (자동 수집용)' : '페이스북 게시물 ID (자동 수집용)'}
+                                                 value={nv.externalVideoId}
+                                                 onChange={(v) => setNv({ ...nv, externalVideoId: v })}
+                                                 placeholder="예: 게시물 URL의 고유 ID"
+                                               />
+                             )}
+            {(nv.platform === 'instagram' || nv.platform === 'facebook' || nv.platform === 'youtube') && (
+                               <Button variant="ghost" onClick={async () => {
+                                                 const id = await resolveMediaId(nv.platform, nv.url);
+                                                 if (id) setNv({ ...nv, externalVideoId: id });
+                               }}>
+                                                 위 '원본 링크'로 실제 ID 조회
+                               </Button>
+                             )}
+            {nv.platform === 'youtube' && nv.externalVideoId && (
+                               <p className="text-xs" style={{ color: colors.textMuted }}>인식된 영상 ID: {nv.externalVideoId}</p>
+                             )}
 
 
  
@@ -360,7 +386,7 @@ const handleCreateWeek = () => {
                               }}
                               style={{ ...inputStyle, textAlign: 'left' as const }}
                             />
-                            {(v.platform === 'instagram' || v.platform === 'facebook') && (
+                              {(v.platform === 'instagram' || v.platform === 'facebook' || v.platform === 'youtube') && (
                               <button
                                 type="button"
                                 onClick={async () => {
